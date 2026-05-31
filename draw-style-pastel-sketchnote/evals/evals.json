@@ -1,0 +1,39 @@
+{
+  "skill_name": "draw-style-pastel-sketchnote",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我画一张中文信息图，说明 Git 分支策略：main 保护、feature 从 main 拉出、PR 合并回 main。要好看、像教程笔记那种，横向时间线排版。",
+      "expected_output": "柔彩速写笔记视觉规范 + 按用户指定的横向时间线结构出图，不强行套用样例图布局",
+      "files": [],
+      "expectations": [
+        "明确 Pastel Sketchnote / 柔彩速写笔记画风",
+        "提及奶油底与手绘墨线等视觉参数",
+        "尊重用户指定的横向时间线，未从样例图照搬构图",
+        "同图柔色填色不超过 5 种"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "用 draw.io 画一个 MCP 接入流程：配置 → 连接服务器 → 工具调用。公司内部分享用，别做成冷冰冰的架构图，自上而下三框即可。",
+      "expected_output": "draw.io 视觉参数 + 用户指定的自上而下三框结构",
+      "files": [],
+      "expectations": [
+        "给出圆角、线宽、填充色等画风参数",
+        "风格为手绘柔彩而非冷色工程图",
+        "采用用户要求的三框纵向结构，未引用样例图布局模式表"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "GenerateImage：画一张「写好 CLAUDE.md」最佳实践，中文，我只要你用左右两栏对比该写和不该写，风格要像手绘教程卡片。",
+      "expected_output": "文生图 prompt 强调 visual style only；布局来自用户两栏要求",
+      "files": [],
+      "expectations": [
+        "prompt 含 cream、hand-drawn、pastel、no gradients",
+        "prompt 不把样例图布局当作模板",
+        "画风为柔彩速写笔记，结构按用户两栏对比"
+      ]
+    }
+  ]
+}
