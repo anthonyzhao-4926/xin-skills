@@ -5,4 +5,4 @@ context: fork
 agent: git-commit-flow
 ---
 
-使用 git-commit-flow subagent 执行 git 提交。主要工作是按照规范生成commit message, 然后自动push
+你必须立即调用Agent工具，subagent_type="git-commit-flow",将用户的请求原样转交给该 subagent 处理。不要直接使用 Bash 执行 git 命令。
