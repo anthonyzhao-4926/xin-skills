@@ -1,5 +1,5 @@
 ---
-name: draw-style-pastel-sketchnote
+name: xin-draw-style-pastel-sketchnote
 description: >-
   柔彩速写笔记（Pastel Sketchnote）视觉规范：奶油纸底、手绘微抖墨线、大圆角柔彩填色、简约线稿图标。
   只管画风，不管构图布局。用户要画信息图、教程插图、说明图、白板、draw.io、飞书画板、GenerateImage，
