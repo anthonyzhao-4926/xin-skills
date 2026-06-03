@@ -4,20 +4,16 @@ description: git 多次提交推送快捷命令。AI 自动分析工作树变更
 context: fork
 agent: Explore
 model: Haiku
-allowed-tools: Glob Grep Read Bash(git status*) Bash(git diff*) Bash(git log*) Bash(git add*) Bash(git restore*) Bash(git reset*) Bash(git commit*) Bash(git branch*) Bash(git push*)
+allowed-tools: Glob Grep Read Bash(git status*) Bash(git diff*) Bash(git log*) Bash(git add*)  Bash(git commit*) Bash(git branch*) Bash(git push*)
 ---
 
 你是一位 Git 工作流专家，精通规范化提交、Git 最佳实践和协作开发工作流。
 
-# 核心理念
-
-把一次开发产生的全部变更，按 **业务功能 / 模块** 拆分成多个独立、原子、可回滚的 commit。每个 commit 只做一件事，让历史清晰可读。
-
-不是为了拆而拆 —— 如果所有变更确实属于同一件事，单个 commit 即可。判断标准：「这些改动如果分别 revert，是否都能独立成立？」
-
 # 执行流程
 
 ## 第 1 步：全面感知工作树状态
+- 暂存全部
+!`git add .`
 - 看清已暂存、未暂存、未跟踪的全部文件
 !`git status`
 - 未暂存变更的具体内容
@@ -29,36 +25,9 @@ allowed-tools: Glob Grep Read Bash(git status*) Bash(git diff*) Bash(git log*) B
 - 当前分支
 !`git branch --show-current`
 
-## 第 2 步：清空暂存区，从干净状态开始
 
-如果已有暂存内容，先 `git restore --staged .` 全部撤回到工作区。这样后续按计划逐个 `git add` 才不会混入预暂存的内容。
-
-`git restore --staged` 只动索引、不丢工作区改动，安全。
-
-## 第 3 步：制定拆分计划
-
-阅读所有 diff，识别变更的「业务边界」。常见的边界信号：
-
-- **不同功能模块**：`auth/` 和 `payment/` 的改动各自独立成 commit
-- **不同抽象层**：领域模型变更 vs 接口层变更 vs 文档变更
-- **不同性质**：新增功能 vs 修复 bug vs 重构 vs 文档
-- **依赖关系**：被依赖的底层改动应排在依赖它的上层改动之前
-
-为每个 commit 确定：
-1. 包含哪些文件（默认按整文件拆；同一文件含多个独立改动时再考虑 hunk 级拆分）
-2. type / scope / subject（遵循下方规范）
-3. 提交顺序（被依赖在前）
-
-将拆分计划简要打印给用户（不等待确认，仅作过程透明）。
-
-## 第 4 步：循环执行每个 commit
-
-对计划中的每一个 commit，依次：
-
-1. `git add <files...>` —— 只暂存属于本次 commit 的文件
-2. `git diff --staged` —— 复核暂存内容是否符合预期
-3. `git commit -m "<type>(<scope>): <subject>"` —— 提交
-4. 进入下一个 commit
+## 第 2 步：执行 commit
+`git commit -m "<type>(<scope>): <subject>"` —— 提交
 
 ## 第 5 步：验证并推送
 
@@ -98,4 +67,16 @@ allowed-tools: Glob Grep Read Bash(git status*) Bash(git diff*) Bash(git log*) B
 - **大型二进制文件**：标记并询问是否应加入 `.gitignore`
 - **未跟踪文件**：默认纳入拆分计划；若疑似临时文件 / 构建产物，先询问
 - **commit 失败（如 pre-commit hook）**：不要 `--amend`，修复问题后重新 `git add` + `git commit` 创建新 commit
+
+# 输出内容
+输出 git commit messsage，
+参考如下两个示例
+```
+ 1. feat(gbd_dim): 新增用户维表的地推渠道字段 (790f2b5)
+       - 在 gbd_dim.moomoo_us_gbd_user_dim_df 和 gbd_dim.moomoo_us_gbd_user_dim_di 两表中
+       - 为 reg/setup/first_assets_in/submit_setup 四个事件段新增地推渠道属性字段
+       - 包括：场次时间戳/日期、督导ID/姓名、场地维护人员ID/姓名、市场/城市/类型/兑换码
+2. fix(gbd_dim): 修正分区参数变量名 (8710ca2)
+       - 将 DI 表插入语句的分区参数从 ${data_date} 更正为 ${pt_date}
+```
 
