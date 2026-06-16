@@ -2,7 +2,6 @@
 name: xin-git-commit-flow
 description: 当需要git 的 commit, push 时使用
 context: fork
-agent: Explore
 model: Haiku
 allowed-tools: Glob Grep Read Bash(git status *) Bash(git diff *) Bash(git log *) Bash(git add *)  Bash(git commit *) Bash(git branch *) Bash(git push *)
 ---
